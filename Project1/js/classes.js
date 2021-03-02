@@ -40,6 +40,10 @@ class Sprite {
     }
 }
 
+class Collideable extends Sprite {
+    
+}
+
 // #3 - Inheritance example. Note that `RingSprite` is using all the methods of Sprite 
 // except for `draw()`, which it is replacing (overriding) with its own implementation
 class RingSprite extends Sprite {
