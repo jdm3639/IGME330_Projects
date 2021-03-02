@@ -1,14 +1,13 @@
 import * as utils from "./utils.js";
-import Sprite from "./classes.js";
-import RingSprite from "./classes.js";
-import ImageSprite from "./classes.js";
+import * as classes from "./classes.js";
 
 // MAIN CODE
-// vbrtbrtb
-let ctx, canvas
+
+let ctx, canvas;
 let gradient;
+let player;
 export let sprites = [];
-const canvasWidth = 600, canvasHeight = 400;
+const canvasWidth = 1280, canvasHeight = 720;
 export let spriteImage = undefined;
 
 function init() {
@@ -20,8 +19,19 @@ function init() {
 
     // #5 - make 2 different kinds of sprites and use `array.concat()` to append them to 
     // the `sprites` array
-    sprites = sprites.concat(sprites, createSprites(10, Sprite));
-    sprites = sprites.concat(sprites, createSprites(20, RingSprite));
+    //sprites = sprites.concat(sprites, createSprites(10, classes.Sprite));
+    //sprites = sprites.concat(sprites, createSprites(20, classes.RingSprite));
+
+    // draw background
+    ctx.save();
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.restore();
+
+    // init player
+    player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12);
+    player.draw(ctx);
+
 
     // But cool kids use the spread operator instead of `array.concat()`
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
@@ -42,7 +52,7 @@ function load() {
 
 function startLoop(image) {
     spriteImage = image;
-    sprites = sprites.concat(sprites, createImageSprites(10, spriteImage));
+    //sprites = sprites.concat(sprites, createImageSprites(10, spriteImage));
 
     console.log("Start loop");
     loop();
@@ -53,13 +63,34 @@ function loop() {
     requestAnimationFrame(loop);
 
     // draw background
-    ctx.save();
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.restore();
+    // ctx.save();
+    // ctx.fillStyle = gradient;
+    // ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    // ctx.restore();
+
+    document.onkeydown = move;
+    //window.addEventListener("keydown", move);
 
     // move and draw sprites
     moveAndDrawSprites(ctx);
+}
+
+function move(e) {
+    if(e.keyCode == 37) { 
+        ctx.save();
+        player.x = -1;
+        player.y = 0;
+        player.move();
+        ctx.restore();
+	}
+	if(e.keyCode == 39) {
+        ctx.save();
+        player.x = 1;
+        player.y = 0;
+        player.move();
+        ctx.restore();
+		//player.x += player.speed;	
+	}
 }
 
 function setupUI() {

@@ -1,6 +1,6 @@
 // #1 CLASS CODE
 // we've put these Sprite classes in a separate <script> tag from the rest of the code, but this code should really be in another file
-export default class Sprite {
+class Sprite {
     constructor(x = 0, y = 0, span = 10, fwd = { x: 1, y: 0 }, speed = 0, color = "black") {
         this.x = x;
         this.y = y;
@@ -27,8 +27,8 @@ export default class Sprite {
     }
 
     move() {
-        this.x += this.fwd.x * this.speed;
-        this.y += this.fwd.y * this.speed;
+        this.x += this.fwd.x;
+        this.y += this.fwd.y;
     }
 
     reflectX() {
@@ -42,7 +42,7 @@ export default class Sprite {
 
 // #3 - Inheritance example. Note that `RingSprite` is using all the methods of Sprite 
 // except for `draw()`, which it is replacing (overriding) with its own implementation
-export class RingSprite extends Sprite {
+class RingSprite extends Sprite {
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
@@ -57,7 +57,7 @@ export class RingSprite extends Sprite {
 
 }
 
-export class ImageSprite extends Sprite {
+class ImageSprite extends Sprite {
     constructor(x, y, span, fwd, speed, image) {
         super(x, y, span, fwd, speed);
         this.image = image;
@@ -78,3 +78,5 @@ export class ImageSprite extends Sprite {
     }
 
 }
+
+export {Sprite, RingSprite, ImageSprite};
