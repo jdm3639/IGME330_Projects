@@ -4,6 +4,7 @@ import RingSprite from "./classes.js";
 import ImageSprite from "./classes.js";
 
 // MAIN CODE
+// vbrtbrtb
 let ctx, canvas
 let gradient;
 export let sprites = [];
