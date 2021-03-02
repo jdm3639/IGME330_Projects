@@ -7,7 +7,7 @@ let ctx, canvas;
 let gradient;
 let player;
 export let sprites = [];
-const canvasWidth = 1280, canvasHeight = 720;
+const canvasWidth = 1280, canvasHeight = 620;
 export let spriteImage = undefined;
 
 function init() {
@@ -78,12 +78,14 @@ function loop() {
 
 function move(e) {
     if(e.keyCode == 37) { 
+        console.log("Go left");
         ctx.save();
         ctx.translate(10, 0);
         player.draw(ctx);
         ctx.restore();
 	}
 	if(e.keyCode == 39) {
+        console.log("Go right");
         ctx.save();
         player.fwd.x = 1;
         player.fwd.y = 0;
