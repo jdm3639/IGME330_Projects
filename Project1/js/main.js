@@ -68,7 +68,8 @@ function loop() {
     // ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     // ctx.restore();
 
-    document.onkeydown = move;
+    window.addEventListener('keydown', move);
+
     //window.addEventListener("keydown", move);
 
     // move and draw sprites
@@ -78,18 +79,17 @@ function loop() {
 function move(e) {
     if(e.keyCode == 37) { 
         ctx.save();
-        player.x = -1;
-        player.y = 0;
-        player.move();
+        ctx.translate(10, 0);
+        player.draw(ctx);
         ctx.restore();
 	}
 	if(e.keyCode == 39) {
         ctx.save();
-        player.x = 1;
-        player.y = 0;
+        player.fwd.x = 1;
+        player.fwd.y = 0;
         player.move();
+        player.draw(ctx);
         ctx.restore();
-		//player.x += player.speed;	
 	}
 }
 
