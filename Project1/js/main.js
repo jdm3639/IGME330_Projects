@@ -12,7 +12,9 @@ let timeTillNextBomb = 0;
 
 let orbs = 0;
 let score = 0;
-let timer;
+let frames = 0;
+let seconds = 0;
+let timer = 60;
 
 export const canvasWidth = 1280, canvasHeight = 620;
 
@@ -87,14 +89,22 @@ function loop() {
     //utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
     movePlayer();
-
-    orbs++;
-    ctx.font = "30px Arial";
-    ctx.fillText("Orbs: " + Math.floor(orbs / 60), 10, 50);
     
-
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
+
+
+    // HUD
+    frames++;
+    seconds = Math.floor(frames / 60);
+    score = ((timer - seconds) * 100) + (orbs * 500);
+
+    ctx.font = "40px Arial";
+    ctx.fillText("Score: " + score, 10, 40);
+
+    ctx.font = "30px Arial";
+    ctx.fillText("Timer: " + (timer - seconds) + "s", 30, 80);
+    ctx.fillText("Orbs: " + orbs, 30, 120);
 }
 
 function keyDownHandler(e) {
