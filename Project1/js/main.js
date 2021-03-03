@@ -39,8 +39,8 @@ function init() {
     player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12, {x: 0, y:0},0,"pink");
     player.draw(ctx);
 
-    phyllo.push(new classes.Phyllo(1200, 350, 137.5, 50, 20));
-    phyllo.push(new classes.Phyllo(200, 350, 137.5, 50, 20));
+    phyllo.push(new classes.Phyllo(1200, 350, 137.5, 50, 30));
+    phyllo.push(new classes.Phyllo(200, 350, 137.5, 50, 30));
 
     for (let i = 0; i < 100; i++) {
         keysDown.push(false);

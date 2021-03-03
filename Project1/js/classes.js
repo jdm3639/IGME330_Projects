@@ -61,7 +61,7 @@ class Bomb extends Sprite {
 }
 
 class Phyllo {
-    constructor(x = 0, y = 0, divergence = 137.5, spacing = 4, defaultRadius = 3, maxCircles = 100) {
+    constructor(x = 0, y = 0, fwd = { x: 1, y: 0 }, divergence = 137.5, spacing = 4, defaultRadius = 3, maxCircles = 100) {
         this.centerX = x;
         this.centerY = y;
         this.circles = [];
@@ -93,6 +93,14 @@ class Phyllo {
             utils.drawCircleWithShadowFromPoint(ctx, this.circles[i].x, this.circles[i].y,this.circles[i].radius,this.circles[i].color, main.getPlayer().x, main.getPlayer().y, realX, realY);
         }
         ctx.restore();
+    }
+
+    reflectX() {
+        this.fwd.x *= -1;
+    }
+
+    reflectY() {
+        this.fwd.y *= -1;
     }
 
     addCircle(radius = this.defaultRadius, color = "black") {
