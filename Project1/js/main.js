@@ -60,13 +60,6 @@ function init() {
 function loop() {
     requestAnimationFrame(loop);
 
-
-
-    ctx.font = "30px Arial";
-    ctx.fillText("Orbs: " + orbs, 10, 50);
-
-
-
     // draw background
     ctx.save();
     ctx.fillStyle = "grey";
@@ -94,6 +87,9 @@ function loop() {
     //utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
     movePlayer();
+
+    ctx.font = "30px Arial";
+    ctx.fillText("Orbs: " + orbs, 10, 50);
     
 
     //window.addEventListener("keydown", move);
