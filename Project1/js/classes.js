@@ -40,47 +40,21 @@ class Sprite {
     }
 }
 
-class Collideable extends Sprite {
-    
-}
+class Bomb extends Sprite {
+    constructor(x = 0, y = 0, radius = 10, fwd = { x: 1, y: 0 }, speed = 0, color = "black") {
+        super(x,y,span,fwd,speed,color)
+    }
 
-// #3 - Inheritance example. Note that `RingSprite` is using all the methods of Sprite 
-// except for `draw()`, which it is replacing (overriding) with its own implementation
-class RingSprite extends Sprite {
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.beginPath();
-        ctx.arc(0, 0, this.span / 2, 0, Math.PI * 2, false);
-        ctx.arc(0, 0, this.span / 4, 0, Math.PI * 2, true);
+        ctx.arc(0, 0, span, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
     }
-
 }
 
-class ImageSprite extends Sprite {
-    constructor(x, y, span, fwd, speed, image) {
-        super(x, y, span, fwd, speed);
-        this.image = image;
-        this.rotation = 0;
-        this.rotationSpeed = (Math.random() - .5) * 5;
-    }
-
-    draw(ctx) {
-        this.rotation += (Math.random() / 60) * this.rotationSpeed * this.speed;
-
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        ctx.beginPath();
-        ctx.drawImage(this.image, -this.span / 2, -this.span / 2, this.span, this.span);
-        ctx.closePath();
-        ctx.restore();
-    }
-
-}
-
-export {Sprite, RingSprite, ImageSprite};
+export {Sprite, Bomb};

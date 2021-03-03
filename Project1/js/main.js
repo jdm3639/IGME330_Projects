@@ -63,12 +63,17 @@ function loop() {
     requestAnimationFrame(loop);
 
     // draw background
-    // ctx.save();
-    // ctx.fillStyle = gradient;
-    // ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    // ctx.restore();
+    ctx.save();
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.restore();
 
     window.addEventListener('keydown', move);
+
+    ctx.save();
+    ctx.translate(player.fwd.x, player.fwd.y);
+    player.draw(ctx);
+    ctx.restore();
 
     //window.addEventListener("keydown", move);
 
@@ -78,20 +83,10 @@ function loop() {
 
 function move(e) {
     if(e.keyCode == 37) { 
-        console.log("Go left");
-        ctx.save();
-        ctx.translate(10, 0);
-        player.draw(ctx);
-        ctx.restore();
+        player.fwd.x -= 4.5;
 	}
 	if(e.keyCode == 39) {
-        console.log("Go right");
-        ctx.save();
-        player.fwd.x = 1;
-        player.fwd.y = 0;
-        player.move();
-        player.draw(ctx);
-        ctx.restore();
+        player.fwd.x += 4.5;
 	}
 }
 
