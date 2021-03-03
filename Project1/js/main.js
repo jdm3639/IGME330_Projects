@@ -101,22 +101,6 @@ function createSprites(num = 5, classRef = Sprite) {
     return array;
 }
 
-function createImageSprites(num, image) {
-    let array = [];
-
-    for (let i = 0; i < num; i++) {
-        let x = Math.random() * (canvasWidth - 100) + 50;
-        let y = Math.random() * (canvasHeight - 100) + 50;
-        let span = 15 + Math.random() * 25;
-        let fwd = utils.getRandomUnitVector();
-        let speed = Math.random() + 2;
-        let s = new ImageSprite(x, y, span, fwd, speed, image);
-
-        array.push(s);
-    }
-    return array;
-}
-
 function moveAndDrawSprites(ctx) {
     ctx.save();
     for (let s of sprites) {
