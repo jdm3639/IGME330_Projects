@@ -65,10 +65,10 @@ function bombSpawner() {
 
 function move(e) {
     if(e.keyCode == 37) { 
-        player.fwd.x -= 4.5;
+        player.fwd.x -= 14.5;
 	}
 	if(e.keyCode == 39) {
-        player.fwd.x += 4.5;
+        player.fwd.x += 14.5;
 	}
 }
 
