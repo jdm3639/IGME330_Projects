@@ -51,6 +51,48 @@ function loop() {
     moveAndDrawSprites(ctx);
 }
 
+// let n = 0;
+// const divergence = 137.5;
+// const c = 4;
+
+// function loop() {
+//     setTimeout(loop, 1000 / 30);
+
+//     // each frame draw a new dot
+//     // `a` is the angle
+//     // `r` is the radius from the center (e.g. "Pole") of the flower
+//     // `c` is the "padding/spacing" between the dots
+//     let a = n * dtr(divergence);
+//     let r = c * Math.sqrt(n);
+//     //console.log(a, r);
+
+//     // now calculate the `x` and `y`
+//     let x = r * Math.cos(a) + canvasWidth / 2;
+//     let y = r * Math.sin(a) + canvasHeight / 2;
+//     //console.log(x, y);
+
+//     let aDegrees = (n * divergence) % 361;
+//     let color = `hsl(${n/5 % 361},100%,50%)`;
+//     drawCircle(ctx, x, y, aDegrees / 100, color);
+
+//     n++;
+// }
+
+// // helpers
+// function dtr(degrees) {
+//     return degrees * (Math.PI / 180);
+// }
+
+// function drawCircle(ctx, x, y, radius, color) {
+//     ctx.save();
+//     ctx.fillStyle = color;
+//     ctx.beginPath();
+//     ctx.arc(x, y, radius, 0, Math.PI * 2);
+//     ctx.closePath();
+//     ctx.fill();
+//     ctx.restore();
+// }
+
 function bombSpawner() {
     if (timeTillNextBomb < 0) {
         let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1,"black");
