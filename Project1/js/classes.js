@@ -1,3 +1,6 @@
+import * as utils from "./utils.js";
+import * as main from "./main.js";
+
 // #1 CLASS CODE
 // we've put these Sprite classes in a separate <script> tag from the rest of the code, but this code should really be in another file
 class Sprite {
@@ -57,4 +60,48 @@ class Bomb extends Sprite {
     }
 }
 
-export {Sprite, Bomb};
+class Phyllo {
+    constructor(x = 0, y = 0, divergence = 137.5, spacing = 4, defaultRadius = 3) {
+        this.centerX = x;
+        this.centerY = y;
+        this.circles = [];
+        this.divergence = divergence;
+        this.spacing = spacing;
+        this.rotation = 0;
+        this.defaultRadius = defaultRadius;
+    }
+
+    move(moveX = 0, moveY = 0) {
+        this.centerX += moveX;
+        this.centerY += moveY;
+    }
+
+    rotate(rads = 0) {
+        this.rotation += rads;
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.translate(this.centerX, this.centerY);
+        ctx.rotate(this.rotation);
+        for (let i = 0; i < this.circles.length; i++) {
+            utils.drawCircle(ctx, this.circles[i].x, this.circles[i].y,this.circles[i].radius,this.circles[i].color);
+        }
+        ctx.restore();
+    }
+
+    addCircle(radius = this.defaultRadius) {
+
+        let a = this.circles.length * utils.dtr(this.divergence);
+        let r = this.spacing * Math.sqrt(this.circles.length);
+
+        let circleX = r * Math.cos(a);
+        let circleY = r * Math.sin(a);
+
+        let aDegrees = (this.circles.length * this.divergence) % 361;
+        let color = `hsl(${this.circles.length/5 % 361},100%,50%)`;
+        this.circles.push({ x: circleX, y: circleY, radius: radius, color: color });
+    }
+}
+
+export {Sprite, Bomb, Phyllo};
