@@ -4,9 +4,10 @@ import * as classes from "./classes.js";
 let ctx, canvas;
 let gradient;
 let player;
-export let sprites = [];
+let sprites = [];
+let bombs = [];
+let timeTillNextBomb = 0;
 const canvasWidth = 1280, canvasHeight = 620;
-export let spriteImage = undefined;
 
 function init() {
     canvas = document.querySelector('canvas');
@@ -44,8 +45,22 @@ function loop() {
     player.draw(ctx);
     ctx.restore();
 
+    bombSpawner();
+
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
+}
+
+function bombSpawner() {
+    if (timeTillNextBomb < 0) {
+        let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1,"black");
+        bombs.push(bomb);
+        sprites.push(bomb);
+        timeTillNextBomb = 1;
+    }
+    
+    timeTillNextBomb -= 0.01;
+    
 }
 
 function move(e) {

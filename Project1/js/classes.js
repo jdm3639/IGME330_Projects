@@ -42,14 +42,14 @@ class Sprite {
 
 class Bomb extends Sprite {
     constructor(x = 0, y = 0, radius = 10, fwd = { x: 1, y: 0 }, speed = 0, color = "black") {
-        super(x,y,span,fwd,speed,color)
+        super(x,y,radius,fwd,speed,color)
     }
 
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.beginPath();
-        ctx.arc(0, 0, span, 0, 2 * Math.PI);
+        ctx.arc(0, 0, this.span, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.fillStyle = this.color;
         ctx.fill();

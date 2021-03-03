@@ -18,7 +18,7 @@ function getRandomUnitVector() {
     return { x: x, y: y };
 }
 
-function getRandom(min, max) {
+export function getRandom(min, max) {
     return Math.random() * (max - min) + min;
 }
 
