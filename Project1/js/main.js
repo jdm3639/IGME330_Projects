@@ -6,23 +6,31 @@ let gradient;
 let player;
 let sprites = [];
 let bombs = [];
+let phyllo = [];
+let keysDown = [];
 let timeTillNextBomb = 0;
-const canvasWidth = 1280, canvasHeight = 620;
+export const canvasWidth = 1280, canvasHeight = 620;
 
 function init() {
     canvas = document.querySelector('canvas');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     ctx = canvas.getContext("2d");
-    gradient = utils.createLinearGradient(ctx, 0, 0, 0, canvasHeight, [{ percent: 0, color: "blue" }, { percent: .25, color: "green" }, { percent: .5, color: "yellow" }, { percent: .75, color: "red" }, { percent: 1, color: "magenta" }])
+    //gradient = utils.createLinearGradient(ctx, 0, 0, 0, canvasHeight, [{ percent: 0, color: "blue" }, { percent: .25, color: "green" }, { percent: .5, color: "yellow" }, { percent: .75, color: "red" }, { percent: 1, color: "magenta" }])
 
     ctx.save();
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = "blue";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
 
     player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12);
     player.draw(ctx);
+
+    phyllo.push(new classes.Phyllo(1200, 350, 137.5, 50));
+
+    for (let i = 0; i < 100; i++) {
+        keysDown.push(false);
+    }
 
     setupUI();
 
@@ -34,11 +42,12 @@ function loop() {
 
     // draw background
     ctx.save();
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = "grey";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
 
-    window.addEventListener('keydown', move);
+    window.addEventListener('keyup', keyUpHandler, false);
+    window.addEventListener('keydown', keyDownHandler , false);
 
     ctx.save();
     ctx.translate(player.fwd.x, player.fwd.y);
@@ -47,8 +56,24 @@ function loop() {
 
     bombSpawner();
 
+    phyllo[0].addCircle(utils.getRandom(6, 15));
+    phyllo[0].move(-.3, 0);
+    phyllo[0].rotate(.001);
+
+    movePlayer();
+
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
+}
+
+function keyDownHandler(e) {
+    if (e.keyCode < 100)
+        keysDown[e.keyCode] = true;
+}
+
+function keyUpHandler(e) {
+    if (e.keyCode < 100)
+        keysDown[e.keyCode] = false;
 }
 
 // let n = 0;
@@ -105,12 +130,19 @@ function bombSpawner() {
     
 }
 
-function move(e) {
-    if(e.keyCode == 37) { 
-        player.fwd.x -= 14.5;
+function movePlayer() {
+    //console.log(`Key pressed: ${e.keyCode}`);
+    if(keysDown[65]) { 
+        player.fwd.x -= 1.5;
 	}
-	if(e.keyCode == 39) {
-        player.fwd.x += 14.5;
+	if(keysDown[68]) {
+        player.fwd.x += 1.5;
+	}
+    if(keysDown[83]) {
+        player.fwd.y += 1.5;
+	}
+    if(keysDown[87]) {
+        player.fwd.y -= 1.5;
 	}
 }
 
@@ -158,6 +190,10 @@ function moveAndDrawSprites(ctx) {
         }
         s.draw(ctx);
     }
+    for (let p of phyllo) {
+        p.draw(ctx);
+    }
+
     ctx.restore();
 }
 

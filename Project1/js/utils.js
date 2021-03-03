@@ -35,6 +35,21 @@ function createLinearGradient(ctx, startX, startY, endX, endY, colorStops) {
     return lg;
 }
 
+export function drawCircle(ctx, x, y, radius, color) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.translate(x, y);
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+}
+
+export function dtr(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
 function preloadImage(url, callback) {
     // 1 - create a new Image object
     let img = new Image();
