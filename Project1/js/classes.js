@@ -57,4 +57,8 @@ class Bomb extends Sprite {
     }
 }
 
-export {Sprite, Bomb};
+class Phyllo {
+    
+}
+
+export {Sprite, Bomb, Phyllo};
