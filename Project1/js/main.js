@@ -91,7 +91,7 @@ function loop() {
     orbs++;
     ctx.font = "30px Arial";
     ctx.fillText("Orbs: " + Math.floor(orbs / 60), 10, 50);
-    
+
 
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
