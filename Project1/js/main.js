@@ -120,4 +120,4 @@ function moveAndDrawSprites(ctx) {
     ctx.restore();
 }
 
-export {init, startLoop};
+export {init};
