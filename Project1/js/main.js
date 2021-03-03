@@ -6,7 +6,6 @@ let gradient;
 let player;
 export let sprites = [];
 const canvasWidth = 1280, canvasHeight = 620;
-export let spriteImage = undefined;
 
 function init() {
     canvas = document.querySelector('canvas');
@@ -80,22 +79,6 @@ function createSprites(num = 5, classRef = Sprite) {
         let speed = Math.random() + 2;
         let color = utils.getRandomColor();
         let s = new classRef(x, y, span, fwd, speed, color);
-
-        array.push(s);
-    }
-    return array;
-}
-
-function createImageSprites(num, image) {
-    let array = [];
-
-    for (let i = 0; i < num; i++) {
-        let x = Math.random() * (canvasWidth - 100) + 50;
-        let y = Math.random() * (canvasHeight - 100) + 50;
-        let span = 15 + Math.random() * 25;
-        let fwd = utils.getRandomUnitVector();
-        let speed = Math.random() + 2;
-        let s = new ImageSprite(x, y, span, fwd, speed, image);
 
         array.push(s);
     }
