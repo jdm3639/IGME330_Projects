@@ -55,8 +55,8 @@ export function drawCircleWithShadowFromPoint(ctx, x, y, radius, color, fromX = 
     let angle = Math.atan2(realY - fromY,realX - fromX);
     //console.log(`y = ${y} x = ${x} fromX = ${fromX} fromY = ${fromY}`);
     //console.log(`angle = ${angle}`);
-    ctx.shadowOffsetX = Math.cos(angle) * 5;
-    ctx.shadowOffsetY = Math.sin(angle) * 5;
+    ctx.shadowOffsetX = Math.cos(angle) * 7;
+    ctx.shadowOffsetY = Math.sin(angle) * 7;
     ctx.shadowColor = "#444444";
     ctx.shadowBlur = 1;
     ctx.closePath();
