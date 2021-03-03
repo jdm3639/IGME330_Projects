@@ -5,24 +5,25 @@
     <meta charset="utf-8" />
     <title>Games</title>
     <script type="module" src="js/loader.js"></script>
-    
-
 </head>
 
 <body>
+    <h2>PhyloGalaxy</h2>
+    <h4>Developed by Justin Blake & Josh Montauge</h4>
     <canvas></canvas>
-    <!-- 
-#10 - note that for radio buttons to be in a group, where only one is selected at a time,
-they need to all have the same value for the `name` attribute. 
-Also note that we have given each of them individually their own `id`, but we're not using
-that value in this example
- -->
-    <div>
-        <input type="radio" id="crawlRadio" name="speed" value="0.1"> <label for="crawlRadio">Crawl</label>
-        <input type="radio" id="slowRadio" name="speed" value="1"> <label for="slowRadio">Slow</label>
-        <input type="radio" id="mediumRadio" name="speed" value="2" checked> <label for="mediumRadio">Medium</label>
-        <input type="radio" id="fastRadio" name="speed" value="3"> <label for="fastRadio">Fast</label>
-    </div>
+    <p>
+        Controls: <br>
+        [W] : Move Player Up <br>
+        [A] : Move Player Left <br>
+        [S] : Move Player Down <br>
+        [D] : Move Player Right <br>
+        <br>
+        Objective: <br>
+        Navigate the player across the screen from left to right. <br>
+        Avoid colliding with the asteroids. <br>
+        Collect 5 (or more) bombs before reaching the right side. <br>
+        Reach the right side with 5 bombs before the timer runs out to win. <br>
+    </p>
 </body>
 
 </html>
