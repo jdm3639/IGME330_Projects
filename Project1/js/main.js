@@ -88,6 +88,7 @@ function loop() {
 
     movePlayer();
 
+    orbs++;
     ctx.font = "30px Arial";
     ctx.fillText("Orbs: " + orbs, 10, 50);
     
