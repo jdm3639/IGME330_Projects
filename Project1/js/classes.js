@@ -1,8 +1,6 @@
 import * as utils from "./utils.js";
 import * as main from "./main.js";
 
-// #1 CLASS CODE
-// we've put these Sprite classes in a separate <script> tag from the rest of the code, but this code should really be in another file
 class Sprite {
     constructor(x = 0, y = 0, span = 10, fwd = { x: 1, y: 0 }, speed = 0, color = "black") {
         this.x = x;
@@ -11,11 +9,6 @@ class Sprite {
         this.fwd = fwd;
         this.speed = speed;
         this.color = color;
-
-        // #2 - Here's a cooler idiom to accomplish the same property assignment as above, 
-        // with one line of code!
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-        //Object.assign(this,{x,y,span,fwd,speed,color});
     }
 
     draw(ctx) {
@@ -87,8 +80,6 @@ class Phyllo {
         for (let i = 0; i < this.circles.length; i++) {
             let localX = this.circles[i].x;
             let localY = this.circles[i].y;
-
-            
 
             let realX = this.centerX + localX;
             let realY = this.centerY + localY;

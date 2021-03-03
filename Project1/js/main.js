@@ -39,8 +39,8 @@ function init() {
     player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12, {x: 0, y:0},0,"pink");
     player.draw(ctx);
 
-    phyllo.push(new classes.Phyllo(1200, 350, {x: 0, y:0}, 137.5, 50, 30));
-    phyllo.push(new classes.Phyllo(200, 350, {x: 0, y:0}, 137.5, 50, 30));
+    phyllo.push(new classes.Phyllo(1200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
+    phyllo.push(new classes.Phyllo(200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
 
     for (let i = 0; i < 100; i++) {
         keysDown.push(false);
@@ -175,10 +175,19 @@ function moveAndDrawSprites(ctx) {
         s.draw(ctx);
     }
     for (let p of phyllo) {
+
+        if (p.x <= p.span / 2 || p.x >= canvasWidth - p.span / 2) {
+            p.reflectX();
+        }
+        if (p.y <= p.span / 2 || p.y >= canvasHeight - p.span / 2) {
+            p.reflectY();
+        }
+
         p.draw(ctx);
     }
 
     ctx.restore();
 }
+
 
 export {init};
