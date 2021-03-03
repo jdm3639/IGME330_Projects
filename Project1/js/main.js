@@ -51,8 +51,6 @@ function init() {
         keysDown.push(false);
     }
 
-    ctx.font = "30px Arial";
-    ctx.fillText("Orbs: " + orbs, 10, 50);
 
     setupUI();
 
@@ -61,6 +59,13 @@ function init() {
 
 function loop() {
     requestAnimationFrame(loop);
+
+
+
+    ctx.font = "30px Arial";
+    ctx.fillText("Orbs: " + orbs, 10, 50);
+
+
 
     // draw background
     ctx.save();
