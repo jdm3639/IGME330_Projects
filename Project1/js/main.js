@@ -19,14 +19,15 @@ function init() {
     //gradient = utils.createLinearGradient(ctx, 0, 0, 0, canvasHeight, [{ percent: 0, color: "blue" }, { percent: .25, color: "green" }, { percent: .5, color: "yellow" }, { percent: .75, color: "red" }, { percent: 1, color: "magenta" }])
 
     ctx.save();
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "grey";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
 
-    player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12);
+    player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12, {x: 0, y:0},0,"pink");
     player.draw(ctx);
 
-    phyllo.push(new classes.Phyllo(1200, 350, 137.5, 50));
+    phyllo.push(new classes.Phyllo(1200, 350, 137.5, 50, 20));
+    phyllo.push(new classes.Phyllo(200, 350, 137.5, 50, 20));
 
     for (let i = 0; i < 100; i++) {
         keysDown.push(false);
@@ -56,17 +57,25 @@ function loop() {
 
     bombSpawner();
 
-    phyllo[0].addCircle(utils.getRandom(6, 15));
+    phyllo[0].addCircle(utils.getRandom(6, 15), "white");
     phyllo[0].move(-.3, 0);
     phyllo[0].rotate(.001);
 
+    phyllo[1].addCircle(utils.getRandom(6, 15), "black");
+    phyllo[1].move(.3, 0);
+    phyllo[1].rotate(-.001);
+
+    utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
+
     movePlayer();
+    
 
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
 }
 
 function keyDownHandler(e) {
+    
     if (e.keyCode < 100)
         keysDown[e.keyCode] = true;
 }
@@ -76,51 +85,9 @@ function keyUpHandler(e) {
         keysDown[e.keyCode] = false;
 }
 
-// let n = 0;
-// const divergence = 137.5;
-// const c = 4;
-
-// function loop() {
-//     setTimeout(loop, 1000 / 30);
-
-//     // each frame draw a new dot
-//     // `a` is the angle
-//     // `r` is the radius from the center (e.g. "Pole") of the flower
-//     // `c` is the "padding/spacing" between the dots
-//     let a = n * dtr(divergence);
-//     let r = c * Math.sqrt(n);
-//     //console.log(a, r);
-
-//     // now calculate the `x` and `y`
-//     let x = r * Math.cos(a) + canvasWidth / 2;
-//     let y = r * Math.sin(a) + canvasHeight / 2;
-//     //console.log(x, y);
-
-//     let aDegrees = (n * divergence) % 361;
-//     let color = `hsl(${n/5 % 361},100%,50%)`;
-//     drawCircle(ctx, x, y, aDegrees / 100, color);
-
-//     n++;
-// }
-
-// // helpers
-// function dtr(degrees) {
-//     return degrees * (Math.PI / 180);
-// }
-
-// function drawCircle(ctx, x, y, radius, color) {
-//     ctx.save();
-//     ctx.fillStyle = color;
-//     ctx.beginPath();
-//     ctx.arc(x, y, radius, 0, Math.PI * 2);
-//     ctx.closePath();
-//     ctx.fill();
-//     ctx.restore();
-// }
-
 function bombSpawner() {
     if (timeTillNextBomb < 0) {
-        let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1,"black");
+        let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1,"lightgreen");
         bombs.push(bomb);
         sprites.push(bomb);
         timeTillNextBomb = 1;
@@ -130,19 +97,23 @@ function bombSpawner() {
     
 }
 
+export function getPlayer() {
+    return player;
+}
+
 function movePlayer() {
     //console.log(`Key pressed: ${e.keyCode}`);
     if(keysDown[65]) { 
-        player.fwd.x -= 1.5;
+        player.x -= 1.5;
 	}
 	if(keysDown[68]) {
-        player.fwd.x += 1.5;
+        player.x += 1.5;
 	}
     if(keysDown[83]) {
-        player.fwd.y += 1.5;
+        player.y += 1.5;
 	}
     if(keysDown[87]) {
-        player.fwd.y -= 1.5;
+        player.y -= 1.5;
 	}
 }
 

@@ -61,7 +61,7 @@ class Bomb extends Sprite {
 }
 
 class Phyllo {
-    constructor(x = 0, y = 0, divergence = 137.5, spacing = 4, defaultRadius = 3) {
+    constructor(x = 0, y = 0, divergence = 137.5, spacing = 4, defaultRadius = 3, maxCircles = 100) {
         this.centerX = x;
         this.centerY = y;
         this.circles = [];
@@ -69,6 +69,7 @@ class Phyllo {
         this.spacing = spacing;
         this.rotation = 0;
         this.defaultRadius = defaultRadius;
+        this.maxCircles = maxCircles;
     }
 
     move(moveX = 0, moveY = 0) {
@@ -85,22 +86,23 @@ class Phyllo {
         ctx.translate(this.centerX, this.centerY);
         ctx.rotate(this.rotation);
         for (let i = 0; i < this.circles.length; i++) {
-            utils.drawCircle(ctx, this.circles[i].x, this.circles[i].y,this.circles[i].radius,this.circles[i].color);
+            //utils.drawCircleWithShadowFromPoint(ctx, this.circles[i].x, this.circles[i].y,this.circles[i].radius,this.circles[i].color, main.getPlayer().fwd.x, main.getPlayer().fwd.y);
         }
         ctx.restore();
     }
 
-    addCircle(radius = this.defaultRadius) {
+    addCircle(radius = this.defaultRadius, color = "black") {
+        if (this.circles.length < this.maxCircles) {
+            let a = this.circles.length * utils.dtr(this.divergence);
+            let r = this.spacing * Math.sqrt(this.circles.length);
 
-        let a = this.circles.length * utils.dtr(this.divergence);
-        let r = this.spacing * Math.sqrt(this.circles.length);
+            let circleX = r * Math.cos(a);
+            let circleY = r * Math.sin(a);
 
-        let circleX = r * Math.cos(a);
-        let circleY = r * Math.sin(a);
-
-        let aDegrees = (this.circles.length * this.divergence) % 361;
-        let color = `hsl(${this.circles.length/5 % 361},100%,50%)`;
-        this.circles.push({ x: circleX, y: circleY, radius: radius, color: color });
+            //let aDegrees = (this.circles.length * this.divergence) % 361;
+            //let color = `hsl(${this.circles.length/5 % 361},100%,50%)`;
+            this.circles.push({ x: circleX, y: circleY, radius: radius, color: color });
+        }
     }
 }
 
