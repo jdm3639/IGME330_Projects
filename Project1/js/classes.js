@@ -77,12 +77,15 @@ class Phyllo {
     draw(ctx) {
         ctx.save();
         ctx.translate(this.centerX, this.centerY);
+
+        let centerPoint = { x:this.circles[0].x, y:this.circles[0].x };
+
         //ctx.rotate(this.rotation);
         for (let i = 0; i < this.circles.length; i++) {
-            let point = utils.rotateAroundPoint(this.centerX, this.centerY, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, false);
+            let point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, false);
             
-            if (i == 7) {
-                point = utils.rotateAroundPoint(this.centerX, this.centerY, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, true);
+            if (i == 0) {
+                point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, true);
                 this.circles[i].color = "red";
             }
             let localX = point.x;
