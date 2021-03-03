@@ -68,6 +68,29 @@ export function dtr(degrees) {
     return degrees * (Math.PI / 180);
 }
 
+export function rotateAroundPoint(cx, cy, angle, p, debug)
+{
+    let s = Math.sin(angle);
+    let c = Math.cos(angle);
+
+    // if (debug) {
+    //     console.log(`sin: ${s} | cos: ${c}`);
+    // }
+
+    // translate point back to origin:
+    p.x -= cx;
+    p.y -= cy;
+
+    // rotate point
+    let xnew = p.x * c - p.y * s;
+    let ynew = p.x * s + p.y * c;
+
+    // translate point back:
+    p.x = xnew + cx;
+    p.y = ynew + cy;
+    return p;
+}
+
 function preloadImage(url, callback) {
     // 1 - create a new Image object
     let img = new Image();
