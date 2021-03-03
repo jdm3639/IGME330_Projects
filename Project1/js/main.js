@@ -11,6 +11,19 @@ let keysDown = [];
 let timeTillNextBomb = 0;
 export const canvasWidth = 1280, canvasHeight = 620;
 
+// NOTES:
+// * make phyllos bounce 
+// * HUD -do now-
+// * Start button
+// * collison calculate -do now-
+// * end game -do now-
+// * (possible) fix shadows
+// * (possible) background image
+// * (possible) sound effects
+// * (possible) music
+// * css file (fonts, format, etc.)
+// * missles > orbs (make collectable) -do now-
+
 function init() {
     canvas = document.querySelector('canvas');
     canvas.width = canvasWidth;
@@ -59,13 +72,13 @@ function loop() {
 
     phyllo[0].addCircle(utils.getRandom(6, 15), "white");
     phyllo[0].move(-.3, 0);
-    phyllo[0].rotate(.001);
+    phyllo[0].rotate(.002);
 
     phyllo[1].addCircle(utils.getRandom(6, 15), "black");
     phyllo[1].move(.3, 0);
-    phyllo[1].rotate(-.001);
+    phyllo[1].rotate(.002);
 
-    utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
+    //utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
     movePlayer();
     

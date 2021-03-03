@@ -86,7 +86,8 @@ class Phyllo {
         ctx.translate(this.centerX, this.centerY);
         ctx.rotate(this.rotation);
         for (let i = 0; i < this.circles.length; i++) {
-            //utils.drawCircleWithShadowFromPoint(ctx, this.circles[i].x, this.circles[i].y,this.circles[i].radius,this.circles[i].color, main.getPlayer().fwd.x, main.getPlayer().fwd.y);
+            let realX = this.centerX - 
+            utils.drawCircleWithShadowFromPoint(ctx, this.circles[i].x, this.circles[i].y,this.circles[i].radius,this.circles[i].color, main.getPlayer().x, main.getPlayer().y);
         }
         ctx.restore();
     }

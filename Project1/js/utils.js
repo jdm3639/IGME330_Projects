@@ -46,17 +46,17 @@ export function drawCircle(ctx, x, y, radius, color) {
     ctx.restore();
 }
 
-export function drawCircleWithShadowFromPoint(ctx, x, y, radius, color, fromX = 0, fromY = 0) {
+export function drawCircleWithShadowFromPoint(ctx, x, y, radius, color, fromX = 0, fromY = 0, realX = 0, realY = 0) {
     ctx.save();
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.translate(x, y);
     ctx.arc(0, 0, radius, 0, Math.PI * 2);
-    let angle = Math.atan2(y - fromY,x - fromX);
+    let angle = Math.atan2(realY - fromY,realX - fromX);
     //console.log(`y = ${y} x = ${x} fromX = ${fromX} fromY = ${fromY}`);
-    console.log(`angle = ${angle}`);
-    ctx.shadowOffsetX = Math.cos(dtr(angle)) * 5;
-    ctx.shadowOffsetY = Math.sin(dtr(angle)) * 5;
+    //console.log(`angle = ${angle}`);
+    ctx.shadowOffsetX = Math.cos(angle) * 5;
+    ctx.shadowOffsetY = Math.sin(angle) * 5;
     ctx.shadowColor = "#444444";
     ctx.shadowBlur = 1;
     ctx.closePath();
