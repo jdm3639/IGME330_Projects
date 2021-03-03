@@ -9,6 +9,11 @@ let bombs = [];
 let phyllo = [];
 let keysDown = [];
 let timeTillNextBomb = 0;
+
+let orbs = 0;
+let score = 0;
+let timer;
+
 export const canvasWidth = 1280, canvasHeight = 620;
 
 // NOTES:
@@ -45,6 +50,9 @@ function init() {
     for (let i = 0; i < 100; i++) {
         keysDown.push(false);
     }
+
+    ctx.font = "30px Arial";
+    ctx.fillText("Orbs: " + orbs, 10, 50);
 
     setupUI();
 
