@@ -125,7 +125,7 @@ class Phyllo {
 
     addCircle(radius = this.defaultRadius, color = "black") {
         if (this.circles.length < this.maxCircles) {
-            let a = this.circles.length * utils.dtr(this.divergence);
+            let a = this.circles.length * utils.toDegrees(this.divergence);
             let r = this.spacing * Math.sqrt(this.circles.length);
 
             let circleX = r * Math.cos(a);

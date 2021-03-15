@@ -3,31 +3,11 @@
 // Maybe in abcLIB.js (if you are working on Project 1) or utils.js (if you are working on Project 2)
 // Also check out `createLinearGradient()`, it's new and handy
 
-function getRandomUnitVector() {
-    let x = getRandom(-1, 1);
-    let y = getRandom(-1, 1);
-    let length = Math.sqrt(x * x + y * y);
-    if (length == 0) { // very unlikely
-        x = 1; // point right
-        y = 0;
-        length = 1;
-    } else {
-        x /= length;
-        y /= length;
-    }
-    return { x: x, y: y };
-}
-
 export function getRandom(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function getRandomColor() {
-    const getByte = _ => 35 + Math.round(Math.random() * 220);
-    return `rgba(${getByte()},${getByte()},${getByte()},1)`;
-}
-
-function createLinearGradient(ctx, startX, startY, endX, endY, colorStops) {
+export function createLinearGradient(ctx, startX, startY, endX, endY, colorStops) {
     let lg = ctx.createLinearGradient(startX, startY, endX, endY);
     for (let stop of colorStops) {
         lg.addColorStop(stop.percent, stop.color);
@@ -64,7 +44,7 @@ export function drawCircleWithShadowFromPoint(ctx, x, y, radius, color, fromX = 
     ctx.restore();
 }
 
-export function dtr(degrees) {
+export function toDegrees(degrees) {
     return degrees * (Math.PI / 180);
 }
 
@@ -73,19 +53,12 @@ export function rotateAroundPoint(cx, cy, angle, p, debug)
     let s = Math.sin(angle);
     let c = Math.cos(angle);
 
-    // if (debug) {
-    //     console.log(`sin: ${s} | cos: ${c}`);
-    // }
-
-    // translate point back to origin:
     p.x -= cx;
     p.y -= cy;
 
-    // rotate point
     let xnew = p.x * c - p.y * s;
     let ynew = p.x * s + p.y * c;
 
-    // translate point back:
     p.x = xnew + cx;
     p.y = ynew + cy;
     return p;
@@ -109,6 +82,3 @@ function preloadImage(url, callback) {
     // 3 - start downloading the image (it is located on an RIT server)
     img.src = url;
 }
-
-
-export {createLinearGradient, preloadImage, getRandomColor, getRandomUnitVector};

@@ -107,20 +107,15 @@ function menuLoop() {
     ctx.restore();
 
     ctx.save();
-    ctx.font = "100px Arial";
+    ctx.font = "100px Kanit";
     ctx.fillStyle = "lightgreen";
     ctx.textAlign = "center";
     ctx.fillText("Phyllostroids", (canvasWidth / 2), 140);
 
-    ctx.font = "30px Arial";
+    ctx.font = "30px Kanit";
     ctx.fillStyle = "gold";
     ctx.textAlign = "center";
     ctx.fillText("Press ENTER to start", (canvasWidth / 2), 200);
-
-    ctx.font = "30px Arial";
-    ctx.fillStyle = "pink";
-    ctx.textAlign = "center";
-    ctx.fillText("Press T to play tutorial", (canvasWidth / 2), 250);
     
     const howToPlay = `Controls:\n
 [W] : Move Player Up\n
@@ -133,7 +128,7 @@ Avoid colliding with the Asteroids.\n
 Collect 10 (or more) Orbs before reaching the right side.\n
 Reach the right side with 5 bombs before the timer runs out to win.`;
 
-    ctx.font = "20px Arial";
+    ctx.font = "20px Kanit";
     ctx.fillStyle = "white";
     ctx.textAlign = "left";
     let lines = howToPlay.split("\n");
@@ -157,17 +152,17 @@ function winLoop() {
     ctx.restore();
 
     ctx.save();
-    ctx.font = "100px Arial";
+    ctx.font = "100px Kanit";
     ctx.fillStyle = "lightgreen";
     ctx.textAlign = "center";
     ctx.fillText("You win", (canvasWidth / 2), 140);
 
-    ctx.font = "30px Arial";
+    ctx.font = "30px Kanit";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText("Press enter to return to the menu", (canvasWidth / 2), 200);
 
-    ctx.font = "70px Arial";
+    ctx.font = "70px Kanit";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText(`Score\n${Math.floor(score)}`, (canvasWidth / 2), 500);
@@ -187,12 +182,12 @@ function endgameLoop() {
     ctx.restore();
 
     ctx.save();
-    ctx.font = "100px Arial";
+    ctx.font = "100px Kanit";
     ctx.fillStyle = "#FF555C";
     ctx.textAlign = "center";
     ctx.fillText("Game Over", (canvasWidth / 2), 140);
 
-    ctx.font = "30px Arial";
+    ctx.font = "30px Kanit";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText("Press enter to return to the menu", (canvasWidth / 2), 200);
@@ -269,12 +264,18 @@ function gameLoop() {
     seconds = Math.floor(frames / 60);
     score -= .1;
 
-    ctx.font = "40px Arial";
+    let timeLeft = timer - seconds;
+
+    if (timeLeft <= 0) {
+        currentScene = Scenes.Endgame;
+    }
+
+    ctx.font = "40px Kanit";
     ctx.fillStyle = "lightgreen";
     ctx.fillText("Score: " + Math.floor(score), 10, 40);
 
-    ctx.font = "30px Arial";
-    ctx.fillText(`Timer: ${(timer - seconds)}s`, 30, 80);
+    ctx.font = "30px Kanit";
+    ctx.fillText(`Timer: ${timeLeft}s`, 30, 80);
     ctx.fillText(`Orbs: ${collectedOrbs} / ${requiredOrbs}`, 30, 120);
 }
 
