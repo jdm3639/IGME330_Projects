@@ -84,7 +84,7 @@ class Phyllo {
         for (let i = 0; i < this.circles.length; i++) {
             let point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, false);
             
-            if (i == 0) {
+            if (i == 7) {
                 point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, true);
                 this.circles[i].color = "red";
             }
@@ -94,6 +94,9 @@ class Phyllo {
             let realX = this.centerX + localX;
             let realY = this.centerY + localY;
             utils.drawCircleWithShadowFromPoint(ctx, localX, localY,this.circles[i].radius,this.circles[i].color, main.getPlayer().x, main.getPlayer().y, realX, realY);
+
+            this.circles[i].realX = realX;
+            this.circles[i].realY = realY;
         }
         ctx.restore();
     }
@@ -116,8 +119,30 @@ class Phyllo {
 
             //let aDegrees = (this.circles.length * this.divergence) % 361;
             //let color = `hsl(${this.circles.length/5 % 361},100%,50%)`;
-            this.circles.push({ x: circleX, y: circleY, radius: radius, color: color });
+            this.circles.push({ x: circleX, y: circleY, radius: radius, color: color, realX:0, realY:0 });
         }
+    }
+
+    isCollidingCheck(point = {x: 0, y:0 }, radius = 1, ctx) {
+        for (let i = 0; i < this.circles.length; i++) {
+            let circle = this.circles[i];
+
+            let distanceBetween = circle.realY - point.y;//Math.hypot(circle.x - point.x, circle.y - point.y)
+            let totalRaduis = circle.radius + radius;
+
+            if (i == 7) {
+                //console.log("distance " + (circle.realY - point.y));
+                utils.drawCircle(ctx, circle.realX, circle.realY, 4, "green");
+                utils.drawCircle(ctx, point.x, point.y, 4, "green");
+            }
+
+            if (distanceBetween < totalRaduis) {
+                console.log("Hit " + i);
+                circle.color = "blue";
+                return {id:i};
+            }
+        }
+        return null;
     }
 }
 

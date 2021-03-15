@@ -43,10 +43,10 @@ function init() {
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
 
-    player = new classes.Sprite(canvasWidth / 2, (canvasHeight / 8) * 7, 12, {x: 0, y:0},0,"pink");
+    player = new classes.Sprite(0, 0, 12, {x: 0, y:0},0,"pink");
     player.draw(ctx);
 
-    phyllo.push(new classes.Phyllo(1200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
+    //phyllo.push(new classes.Phyllo(1200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
     phyllo.push(new classes.Phyllo(200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
 
     for (let i = 0; i < 100; i++) {
@@ -77,14 +77,15 @@ function loop() {
     ctx.restore();
 
     bombSpawner();
+    
 
     phyllo[0].addCircle(utils.getRandom(6, 15), "white");
-    phyllo[0].move(-.3, 0);
+    phyllo[0].move(.3, 0);
     phyllo[0].rotate(.002);
 
-    phyllo[1].addCircle(utils.getRandom(6, 15), "black");
-    phyllo[1].move(.3, 0);
-    phyllo[1].rotate(.002);
+    // phyllo[1].addCircle(utils.getRandom(6, 15), "black");
+    // phyllo[1].move(.3, 0);
+    // phyllo[1].rotate(.002);
 
     //utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
@@ -92,6 +93,8 @@ function loop() {
 
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
+
+    phyllo[0].isCollidingCheck({x:player.x, y:player.y}, 10, ctx);
 
 
     // HUD
@@ -105,6 +108,8 @@ function loop() {
     ctx.font = "30px Arial";
     ctx.fillText("Timer: " + (timer - seconds) + "s", 30, 80);
     ctx.fillText("Orbs: " + orbs, 30, 120);
+
+    
 }
 
 function keyDownHandler(e) {
