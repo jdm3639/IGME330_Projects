@@ -2,21 +2,17 @@ import * as utils from "./utils.js";
 import * as classes from "./classes.js";
 
 let ctx, canvas;
-let gradient;
 let player;
-let sprites = [];
 let orbs = [];
 let phyllo = [];
 let keysDown = [];
 let timeTillNextOrb = 0;
-
 let collectedOrbs = 0;
 let requiredOrbs = 5;
 let score = 0;
 let frames = 0;
 let seconds = 0;
 let timer = 60;
-
 let timerTillNextEnterForMenu = 0;
 
 const Scenes = { "Menu": 1, "Game": 2, "Endgame": 3, "Win": 4 };
@@ -25,25 +21,11 @@ let currentScene = Scenes.Menu;
 
 export const canvasWidth = 1280, canvasHeight = 620;
 
-// NOTES:
-// * make phyllos bounce 
-// * HUD -do now-
-// * Start button
-// * collison calculate -do now-
-// * end game -do now-
-// * (possible) fix shadows
-// * (possible) background image
-// * (possible) sound effects
-// * (possible) music
-// * css file (fonts, format, etc.)
-// * missles > orbs (make collectable) -do now-
-
 function init() {
     canvas = document.querySelector('canvas');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     ctx = canvas.getContext("2d");
-    //gradient = utils.createLinearGradient(ctx, 0, 0, 0, canvasHeight, [{ percent: 0, color: "blue" }, { percent: .25, color: "green" }, { percent: .5, color: "yellow" }, { percent: .75, color: "red" }, { percent: 1, color: "magenta" }])
 
     for (let i = 0; i < 100; i++) {
         keysDown.push(false);
@@ -331,43 +313,12 @@ function setupUI() {
     }
 }
 
-function createSprites(num = 5, classRef = Sprite) {
-    let array = [];
-
-    for (let i = 0; i < num; i++) {
-        let x = Math.random() * (canvasWidth - 100) + 50;
-        let y = Math.random() * (canvasHeight - 100) + 50;
-        let span = 15 + Math.random() * 25;
-        let fwd = utils.getRandomUnitVector();
-        let speed = Math.random() + 2;
-        let color = utils.getRandomColor();
-        let s = new classRef(x, y, span, fwd, speed, color);
-
-        array.push(s);
-    }
-    return array;
-}
-
 function moveAndDrawSprites(ctx) {
     ctx.save();
     for (let orb of orbs) {
         orb.move();
         orb.draw(ctx);
     }
-
-    // for (let s of sprites) {
-    //     s.move();
-
-    //     if (s.x <= s.span / 2 || s.x >= canvasWidth - s.span / 2) {
-    //         s.reflectX();
-    //         s.move();
-    //     }
-    //     if (s.y <= s.span / 2 || s.y >= canvasHeight - s.span / 2) {
-    //         s.reflectY();
-    //         s.move();
-    //     }
-    //     s.draw(ctx);
-    // }
     for (let p of phyllo) {
 
         if (p.x <= p.span / 2 || p.x >= canvasWidth - p.span / 2) {
