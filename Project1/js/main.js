@@ -130,7 +130,7 @@ function menuLoop() {
 Objective:\n
 Navigate the Player (pink square) across the screen from left to right.\n
 Avoid colliding with the Asteroids (white, black, or red circles).\n
-Collect 5 (or more) Orbs (green circles) before reaching the right side.\n
+Collect 5 (or more) Orbs (gold circles) before reaching the right side.\n
 Reach the right side with 5 Orbs before the timer runs out to win.`;
 
     ctx.font = "20px Arial";
