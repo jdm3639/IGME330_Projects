@@ -98,9 +98,9 @@ class Phyllo {
         for (let i = 0; i < this.circles.length; i++) {
             let point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x: this.circles[i].x, y: this.circles[i].y }, false);
 
-            if (i == 7) {
-                point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x: this.circles[i].x, y: this.circles[i].y }, true);
-                this.circles[i].color = "red";
+            if (i == 0) {
+                //point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x: this.circles[i].x, y: this.circles[i].y }, true);
+                this.circles[i].color = "#FF555C";
             }
             let localX = point.x;
             let localY = point.y;

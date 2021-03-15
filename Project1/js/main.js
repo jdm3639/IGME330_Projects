@@ -72,6 +72,7 @@ function buildGameScene() {
     seconds = 0;
     frames = 0;
     collectedOrbs = 0;
+    score = 1000;
 }
 
 function loop() {
@@ -107,14 +108,38 @@ function menuLoop() {
 
     ctx.save();
     ctx.font = "100px Arial";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "lightgreen";
     ctx.textAlign = "center";
     ctx.fillText("Phyllostroids", (canvasWidth / 2), 140);
 
     ctx.font = "30px Arial";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "gold";
     ctx.textAlign = "center";
-    ctx.fillText("Press enter to start", (canvasWidth / 2), 200);
+    ctx.fillText("Press ENTER to start", (canvasWidth / 2), 200);
+
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "pink";
+    ctx.textAlign = "center";
+    ctx.fillText("Press T to play tutorial", (canvasWidth / 2), 250);
+    
+    const howToPlay = `Controls:\n
+[W] : Move Player Up\n
+[A] : Move Player Left\n
+[S] : Move Player Down\n
+[D] : Move Player Right\n\n
+Objective:\n
+Navigate the Player across the screen from left to right.\n
+Avoid colliding with the Asteroids.\n
+Collect 10 (or more) Orbs before reaching the right side.\n
+Reach the right side with 5 bombs before the timer runs out to win.`;
+
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "left";
+    let lines = howToPlay.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], 100, 300 + (i * 13));
+    }   
     ctx.restore();
 
     if (keysDown[13] && timerTillNextEnterForMenu < 0) {
@@ -141,6 +166,11 @@ function winLoop() {
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText("Press enter to return to the menu", (canvasWidth / 2), 200);
+
+    ctx.font = "70px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText(`Score\n${Math.floor(score)}`, (canvasWidth / 2), 500);
     ctx.restore();
 
     if (keysDown[13] && timerTillNextEnterForMenu < 0) {
@@ -197,9 +227,9 @@ function gameLoop() {
     phyllo[1].move(.3, 0);
     phyllo[1].rotate(.002);
 
-    // utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
-
     moveAndDrawSprites(ctx);
+
+    // utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
     movePlayer();
 
@@ -218,7 +248,7 @@ function gameLoop() {
     for (let i = 0; i < phyllo.length; i++) {
         if (phyllo[i].isCollidingCheck({ x: player.x, y: player.y }, 10) != null) {
             currentScene = Scenes.Endgame;
-            // console.log("player hit a phyllo!")
+            // console.log("player hit a phyllo!");
             break;
         }
     }
@@ -226,9 +256,10 @@ function gameLoop() {
     // check collisions on orbs
     for (let i = 0; i < orbs.length; i++) {
         if (orbs[i].isCollidingCheck({ x: player.x, y: player.y }, 10, i) == true) {
-            // console.log("player hit an orb!")
+            // console.log("player hit an orb!");
             orbs[i].color = "grey";
             collectedOrbs++;
+            score += 100;
             break;
         }
     }
@@ -236,10 +267,11 @@ function gameLoop() {
     // HUD
     frames++;
     seconds = Math.floor(frames / 60);
-    score = ((timer - seconds) * 100) + (collectedOrbs * 500);
+    score -= .1;
 
     ctx.font = "40px Arial";
-    ctx.fillText("Score: " + score, 10, 40);
+    ctx.fillStyle = "lightgreen";
+    ctx.fillText("Score: " + Math.floor(score), 10, 40);
 
     ctx.font = "30px Arial";
     ctx.fillText(`Timer: ${(timer - seconds)}s`, 30, 80);
