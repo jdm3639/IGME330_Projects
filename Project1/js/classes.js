@@ -127,21 +127,22 @@ class Phyllo {
         for (let i = 0; i < this.circles.length; i++) {
             let circle = this.circles[i];
 
-            let distanceBetween = circle.realY - point.y;//Math.hypot(circle.x - point.x, circle.y - point.y)
+            let distanceBetween = Math.hypot(circle.realX - point.x, circle.realY - point.y);
             let totalRaduis = circle.radius + radius;
 
-            if (i == 7) {
-                //console.log("distance " + (circle.realY - point.y));
-                utils.drawCircle(ctx, circle.realX, circle.realY, 4, "green");
-                utils.drawCircle(ctx, point.x, point.y, 4, "green");
-            }
+            // if (i == 0) {
+            //     console.log("distance " + distanceBetween);
+            //     utils.drawCircle(ctx, circle.realX, circle.realY, 4, "green");
+            //     utils.drawCircle(ctx, point.x, point.y, 4, "green");
+            // }
 
             if (distanceBetween < totalRaduis) {
-                console.log("Hit " + i);
+                // console.log("Hit " + i);
                 circle.color = "blue";
                 return {id:i};
             }
         }
+        // console.log("no Hit");
         return null;
     }
 }

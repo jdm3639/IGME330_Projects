@@ -16,6 +16,12 @@ let frames = 0;
 let seconds = 0;
 let timer = 60;
 
+let timerTillNextEnterForMenu = 0;
+
+const Scenes = { "Menu": 1, "Game": 2, "Endgame": 3 };
+
+let currentScene = Scenes.Menu;
+
 export const canvasWidth = 1280, canvasHeight = 620;
 
 // NOTES:
@@ -38,38 +44,107 @@ function init() {
     ctx = canvas.getContext("2d");
     //gradient = utils.createLinearGradient(ctx, 0, 0, 0, canvasHeight, [{ percent: 0, color: "blue" }, { percent: .25, color: "green" }, { percent: .5, color: "yellow" }, { percent: .75, color: "red" }, { percent: 1, color: "magenta" }])
 
-    ctx.save();
-    ctx.fillStyle = "grey";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.restore();
-
-    player = new classes.Sprite(0, 0, 12, {x: 0, y:0},0,"pink");
-    player.draw(ctx);
-
-    //phyllo.push(new classes.Phyllo(1200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
-    phyllo.push(new classes.Phyllo(200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
-
     for (let i = 0; i < 100; i++) {
         keysDown.push(false);
     }
-
 
     setupUI();
 
     loop();
 }
 
+function buildGameScene() {
+    ctx.save();
+    ctx.fillStyle = "grey";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.restore();
+
+    player = new classes.Sprite(50, canvasHeight / 2, 12, { x: 0, y: 0 }, 0, "pink");
+    player.draw(ctx);
+
+    phyllo = [];
+    phyllo.push(new classes.Phyllo(1200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
+    phyllo.push(new classes.Phyllo(1400, 350, utils.getRandomUnitVector, 137.5, 50, 30));
+}
+
 function loop() {
     requestAnimationFrame(loop);
 
+    window.addEventListener('keyup', keyUpHandler, false);
+    window.addEventListener('keydown', keyDownHandler, false);
+
+    timerTillNextEnterForMenu -= 0.01;
+
+    switch (currentScene) {
+        case Scenes.Menu:
+            menuLoop();
+            break;
+        case Scenes.Game:
+            gameLoop();
+            break;
+        case Scenes.Endgame:
+            endgameLoop();
+            break;
+    }
+}
+
+function menuLoop() {
     // draw background
     ctx.save();
     ctx.fillStyle = "grey";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
 
-    window.addEventListener('keyup', keyUpHandler, false);
-    window.addEventListener('keydown', keyDownHandler , false);
+    ctx.save();
+    ctx.font = "100px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText("Phyllostroids", (canvasWidth / 2), 140);
+
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("Press enter to begin", (canvasWidth / 2), 200);
+    ctx.restore();
+
+    if (keysDown[13] && timerTillNextEnterForMenu < 0) {
+        timerTillNextEnterForMenu = 1;
+        currentScene = Scenes.Game;
+        buildGameScene();
+    }
+}
+
+function endgameLoop() {
+    // draw background
+    ctx.save();
+    ctx.fillStyle = "grey";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = "100px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText("Game Over", (canvasWidth / 2), 140);
+
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("Press enter to begin", (canvasWidth / 2), 200);
+    ctx.restore();
+
+    if (keysDown[13] && timerTillNextEnterForMenu < 0) {
+        timerTillNextEnterForMenu = 1;
+        currentScene = Scenes.Menu;
+    }
+}
+
+function gameLoop() {
+    // draw background
+    ctx.save();
+    ctx.fillStyle = "grey";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.restore();
 
     ctx.save();
     ctx.translate(player.fwd.x, player.fwd.y);
@@ -77,25 +152,30 @@ function loop() {
     ctx.restore();
 
     bombSpawner();
-    
 
     phyllo[0].addCircle(utils.getRandom(6, 15), "white");
-    phyllo[0].move(.3, 0);
+    phyllo[0].move(-.3, 0);
     phyllo[0].rotate(.002);
 
-    // phyllo[1].addCircle(utils.getRandom(6, 15), "black");
-    // phyllo[1].move(.3, 0);
-    // phyllo[1].rotate(.002);
+    phyllo[1].addCircle(utils.getRandom(6, 15), "black");
+    phyllo[1].move(-.6, 0);
+    phyllo[1].rotate(.002);
 
-    //utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
+    // utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
     movePlayer();
 
     //window.addEventListener("keydown", move);
     moveAndDrawSprites(ctx);
 
-    phyllo[0].isCollidingCheck({x:player.x, y:player.y}, 10, ctx);
-
+    // check collision on phyllos
+    for (let i = 0; i < phyllo.length; i++) {
+        if (phyllo[i].isCollidingCheck({ x: player.x, y: player.y }, 10, ctx) != null) {
+            currentScene = Scenes.Endgame;
+            console.log("player hit a phyllo!")
+            break;
+        }
+    }
 
     // HUD
     frames++;
@@ -108,12 +188,9 @@ function loop() {
     ctx.font = "30px Arial";
     ctx.fillText("Timer: " + (timer - seconds) + "s", 30, 80);
     ctx.fillText("Orbs: " + orbs, 30, 120);
-
-    
 }
 
 function keyDownHandler(e) {
-    
     if (e.keyCode < 100)
         keysDown[e.keyCode] = true;
 }
@@ -125,14 +202,13 @@ function keyUpHandler(e) {
 
 function bombSpawner() {
     if (timeTillNextBomb < 0) {
-        let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1,"lightgreen");
+        let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1, "lightgreen");
         bombs.push(bomb);
         sprites.push(bomb);
         timeTillNextBomb = 1;
     }
-    
+
     timeTillNextBomb -= 0.01;
-    
 }
 
 export function getPlayer() {
@@ -141,18 +217,18 @@ export function getPlayer() {
 
 function movePlayer() {
     //console.log(`Key pressed: ${e.keyCode}`);
-    if(keysDown[65]) { 
+    if (keysDown[65]) {
         player.x -= 1.5;
-	}
-	if(keysDown[68]) {
+    }
+    if (keysDown[68]) {
         player.x += 1.5;
-	}
-    if(keysDown[83]) {
+    }
+    if (keysDown[83]) {
         player.y += 1.5;
-	}
-    if(keysDown[87]) {
+    }
+    if (keysDown[87]) {
         player.y -= 1.5;
-	}
+    }
 }
 
 function setupUI() {
@@ -215,4 +291,4 @@ function moveAndDrawSprites(ctx) {
 }
 
 
-export {init};
+export { init };
