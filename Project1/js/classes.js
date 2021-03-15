@@ -36,9 +36,11 @@ class Sprite {
     }
 }
 
-class Bomb extends Sprite {
+class Orb extends Sprite {
     constructor(x = 0, y = 0, radius = 10, fwd = { x: 1, y: 0 }, speed = 0, color = "black") {
-        super(x,y,radius,fwd,speed,color)
+        super(x, y, radius, fwd, speed, color);
+        this.radius = radius;
+        this.hasBeenCollected = false;
     }
 
     draw(ctx) {
@@ -50,6 +52,18 @@ class Bomb extends Sprite {
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.restore();
+    }
+
+    isCollidingCheck(point = { x: 0, y: 0 }, radius = 1, id = 0) {
+        let distanceBetween = Math.hypot(this.x - point.x, this.y - point.y);
+        let totalRaduis = this.radius + radius;
+
+        if (distanceBetween < totalRaduis && !this.hasBeenCollected) {
+            this.hasBeenCollected = true;
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -78,14 +92,14 @@ class Phyllo {
         ctx.save();
         ctx.translate(this.centerX, this.centerY);
 
-        let centerPoint = { x:this.circles[0].x, y:this.circles[0].x };
+        let centerPoint = { x: this.circles[0].x, y: this.circles[0].x };
 
         //ctx.rotate(this.rotation);
         for (let i = 0; i < this.circles.length; i++) {
-            let point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, false);
-            
+            let point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x: this.circles[i].x, y: this.circles[i].y }, false);
+
             if (i == 7) {
-                point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x:this.circles[i].x, y:this.circles[i].y }, true);
+                point = utils.rotateAroundPoint(centerPoint.x, centerPoint.y, this.rotation, { x: this.circles[i].x, y: this.circles[i].y }, true);
                 this.circles[i].color = "red";
             }
             let localX = point.x;
@@ -93,7 +107,7 @@ class Phyllo {
 
             let realX = this.centerX + localX;
             let realY = this.centerY + localY;
-            utils.drawCircleWithShadowFromPoint(ctx, localX, localY,this.circles[i].radius,this.circles[i].color, main.getPlayer().x, main.getPlayer().y, realX, realY);
+            utils.drawCircleWithShadowFromPoint(ctx, localX, localY, this.circles[i].radius, this.circles[i].color, main.getPlayer().x, main.getPlayer().y, realX, realY);
 
             this.circles[i].realX = realX;
             this.circles[i].realY = realY;
@@ -119,11 +133,11 @@ class Phyllo {
 
             //let aDegrees = (this.circles.length * this.divergence) % 361;
             //let color = `hsl(${this.circles.length/5 % 361},100%,50%)`;
-            this.circles.push({ x: circleX, y: circleY, radius: radius, color: color, realX:0, realY:0 });
+            this.circles.push({ x: circleX, y: circleY, radius: radius, color: color, realX: 0, realY: 0 });
         }
     }
 
-    isCollidingCheck(point = {x: 0, y:0 }, radius = 1, ctx) {
+    isCollidingCheck(point = { x: 0, y: 0 }, radius = 1) {
         for (let i = 0; i < this.circles.length; i++) {
             let circle = this.circles[i];
 
@@ -139,7 +153,7 @@ class Phyllo {
             if (distanceBetween < totalRaduis) {
                 // console.log("Hit " + i);
                 circle.color = "blue";
-                return {id:i};
+                return { id: i };
             }
         }
         // console.log("no Hit");
@@ -147,4 +161,4 @@ class Phyllo {
     }
 }
 
-export {Sprite, Bomb, Phyllo};
+export { Sprite, Orb, Phyllo };

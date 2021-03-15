@@ -5,12 +5,13 @@ let ctx, canvas;
 let gradient;
 let player;
 let sprites = [];
-let bombs = [];
+let orbs = [];
 let phyllo = [];
 let keysDown = [];
-let timeTillNextBomb = 0;
+let timeTillNextOrb = 0;
 
-let orbs = 0;
+let collectedOrbs = 0;
+let requiredOrbs = 5;
 let score = 0;
 let frames = 0;
 let seconds = 0;
@@ -18,7 +19,7 @@ let timer = 60;
 
 let timerTillNextEnterForMenu = 0;
 
-const Scenes = { "Menu": 1, "Game": 2, "Endgame": 3 };
+const Scenes = { "Menu": 1, "Game": 2, "Endgame": 3, "Win": 4 };
 
 let currentScene = Scenes.Menu;
 
@@ -62,9 +63,15 @@ function buildGameScene() {
     player = new classes.Sprite(50, canvasHeight / 2, 12, { x: 0, y: 0 }, 0, "pink");
     player.draw(ctx);
 
+    orbs = [];
     phyllo = [];
     phyllo.push(new classes.Phyllo(1200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
-    phyllo.push(new classes.Phyllo(1400, 350, utils.getRandomUnitVector, 137.5, 50, 30));
+    phyllo.push(new classes.Phyllo(200, 350, utils.getRandomUnitVector, 137.5, 50, 30));
+
+    timer = 60;
+    seconds = 0;
+    frames = 0;
+    collectedOrbs = 0;
 }
 
 function loop() {
@@ -85,6 +92,9 @@ function loop() {
         case Scenes.Endgame:
             endgameLoop();
             break;
+        case Scenes.Win:
+            winLoop();
+            break;
     }
 }
 
@@ -104,13 +114,38 @@ function menuLoop() {
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
-    ctx.fillText("Press enter to begin", (canvasWidth / 2), 200);
+    ctx.fillText("Press enter to start", (canvasWidth / 2), 200);
     ctx.restore();
 
     if (keysDown[13] && timerTillNextEnterForMenu < 0) {
         timerTillNextEnterForMenu = 1;
         currentScene = Scenes.Game;
         buildGameScene();
+    }
+}
+
+function winLoop() {
+    // draw background
+    ctx.save();
+    ctx.fillStyle = "grey";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = "100px Arial";
+    ctx.fillStyle = "lightgreen";
+    ctx.textAlign = "center";
+    ctx.fillText("You win", (canvasWidth / 2), 140);
+
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.fillText("Press enter to return to the menu", (canvasWidth / 2), 200);
+    ctx.restore();
+
+    if (keysDown[13] && timerTillNextEnterForMenu < 0) {
+        timerTillNextEnterForMenu = .5;
+        currentScene = Scenes.Menu;
     }
 }
 
@@ -123,18 +158,18 @@ function endgameLoop() {
 
     ctx.save();
     ctx.font = "100px Arial";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#FF555C";
     ctx.textAlign = "center";
     ctx.fillText("Game Over", (canvasWidth / 2), 140);
 
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
-    ctx.fillText("Press enter to begin", (canvasWidth / 2), 200);
+    ctx.fillText("Press enter to return to the menu", (canvasWidth / 2), 200);
     ctx.restore();
 
     if (keysDown[13] && timerTillNextEnterForMenu < 0) {
-        timerTillNextEnterForMenu = 1;
+        timerTillNextEnterForMenu = .5;
         currentScene = Scenes.Menu;
     }
 }
@@ -146,33 +181,54 @@ function gameLoop() {
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.restore();
 
+    // draw exit area
     ctx.save();
-    ctx.translate(player.fwd.x, player.fwd.y);
-    player.draw(ctx);
+    ctx.fillStyle = collectedOrbs >= requiredOrbs ? "lightgreen" : "#FF555C";
+    ctx.fillRect(canvasWidth - 50, 0, 50, canvasHeight);
     ctx.restore();
 
-    bombSpawner();
+    orbSpawner();
 
     phyllo[0].addCircle(utils.getRandom(6, 15), "white");
     phyllo[0].move(-.3, 0);
     phyllo[0].rotate(.002);
 
     phyllo[1].addCircle(utils.getRandom(6, 15), "black");
-    phyllo[1].move(-.6, 0);
+    phyllo[1].move(.3, 0);
     phyllo[1].rotate(.002);
 
     // utils.drawCircleWithShadowFromPoint(ctx, 100,100,5,"red",getPlayer().x, getPlayer().y)
 
+    moveAndDrawSprites(ctx);
+
     movePlayer();
 
-    //window.addEventListener("keydown", move);
-    moveAndDrawSprites(ctx);
+    // draw player
+    ctx.save();
+    ctx.translate(player.fwd.x, player.fwd.y);
+    player.draw(ctx);
+    ctx.restore();
+
+    // check to see if the player is completing the game
+    if (collectedOrbs >= requiredOrbs && player.x > canvasWidth - 50) {
+        currentScene = Scenes.Win;
+    }
 
     // check collision on phyllos
     for (let i = 0; i < phyllo.length; i++) {
-        if (phyllo[i].isCollidingCheck({ x: player.x, y: player.y }, 10, ctx) != null) {
+        if (phyllo[i].isCollidingCheck({ x: player.x, y: player.y }, 10) != null) {
             currentScene = Scenes.Endgame;
-            console.log("player hit a phyllo!")
+            // console.log("player hit a phyllo!")
+            break;
+        }
+    }
+
+    // check collisions on orbs
+    for (let i = 0; i < orbs.length; i++) {
+        if (orbs[i].isCollidingCheck({ x: player.x, y: player.y }, 10, i) == true) {
+            // console.log("player hit an orb!")
+            orbs[i].color = "grey";
+            collectedOrbs++;
             break;
         }
     }
@@ -180,14 +236,14 @@ function gameLoop() {
     // HUD
     frames++;
     seconds = Math.floor(frames / 60);
-    score = ((timer - seconds) * 100) + (orbs * 500);
+    score = ((timer - seconds) * 100) + (collectedOrbs * 500);
 
     ctx.font = "40px Arial";
     ctx.fillText("Score: " + score, 10, 40);
 
     ctx.font = "30px Arial";
-    ctx.fillText("Timer: " + (timer - seconds) + "s", 30, 80);
-    ctx.fillText("Orbs: " + orbs, 30, 120);
+    ctx.fillText(`Timer: ${(timer - seconds)}s`, 30, 80);
+    ctx.fillText(`Orbs: ${collectedOrbs} / ${requiredOrbs}`, 30, 120);
 }
 
 function keyDownHandler(e) {
@@ -200,15 +256,14 @@ function keyUpHandler(e) {
         keysDown[e.keyCode] = false;
 }
 
-function bombSpawner() {
-    if (timeTillNextBomb < 0) {
-        let bomb = new classes.Bomb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1, "lightgreen");
-        bombs.push(bomb);
-        sprites.push(bomb);
-        timeTillNextBomb = 1;
+function orbSpawner() {
+    if (timeTillNextOrb < 0) {
+        let orb = new classes.Orb(utils.getRandom(0, canvasWidth), 15, 5, { x: 0, y: 1 }, 1, "gold");
+        orbs.push(orb);
+        timeTillNextOrb = 1;
     }
 
-    timeTillNextBomb -= 0.01;
+    timeTillNextOrb -= 0.01;
 }
 
 export function getPlayer() {
@@ -262,19 +317,24 @@ function createSprites(num = 5, classRef = Sprite) {
 
 function moveAndDrawSprites(ctx) {
     ctx.save();
-    for (let s of sprites) {
-        s.move();
-
-        if (s.x <= s.span / 2 || s.x >= canvasWidth - s.span / 2) {
-            s.reflectX();
-            s.move();
-        }
-        if (s.y <= s.span / 2 || s.y >= canvasHeight - s.span / 2) {
-            s.reflectY();
-            s.move();
-        }
-        s.draw(ctx);
+    for (let orb of orbs) {
+        orb.move();
+        orb.draw(ctx);
     }
+
+    // for (let s of sprites) {
+    //     s.move();
+
+    //     if (s.x <= s.span / 2 || s.x >= canvasWidth - s.span / 2) {
+    //         s.reflectX();
+    //         s.move();
+    //     }
+    //     if (s.y <= s.span / 2 || s.y >= canvasHeight - s.span / 2) {
+    //         s.reflectY();
+    //         s.move();
+    //     }
+    //     s.draw(ctx);
+    // }
     for (let p of phyllo) {
 
         if (p.x <= p.span / 2 || p.x >= canvasWidth - p.span / 2) {
