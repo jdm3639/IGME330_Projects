@@ -123,10 +123,10 @@ function menuLoop() {
 [S] : Move Player Down\n
 [D] : Move Player Right\n\n
 Objective:\n
-Navigate the Player across the screen from left to right.\n
-Avoid colliding with the Asteroids.\n
-Collect 10 (or more) Orbs before reaching the right side.\n
-Reach the right side with 5 bombs before the timer runs out to win.`;
+Navigate the Player (pink square) across the screen from left to right.\n
+Avoid colliding with the Asteroids (white, black, or red circles).\n
+Collect 5 (or more) Orbs (gold circles) before reaching the right side.\n
+Reach the right side with 5 Orbs before the timer runs out to win.`;
 
     ctx.font = "20px Kanit";
     ctx.fillStyle = "white";
